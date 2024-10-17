@@ -53,7 +53,8 @@ export class DashboardComponent implements OnInit {
   readonly #document: Document = inject(DOCUMENT);
   readonly #renderer: Renderer2 = inject(Renderer2);
   readonly #chartsData: DashboardChartsData = inject(DashboardChartsData);
-
+	logged_usertype:any = '';
+	
 	constructor(
 		private router: Router
 	){
