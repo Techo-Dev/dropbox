@@ -68,7 +68,7 @@ export class UsersComponent implements OnInit {
 		 
 		const body = { basePath: this.root_folderpath };
 
-		return this.http.post('http://localhost:3000/basefolder', body);
+		return this.http.post('https://drop-backend-seven.vercel.app/basefolder', body);
 	}
   
 	getRootFolders() {
@@ -100,7 +100,7 @@ export class UsersComponent implements OnInit {
     }
 	
     fetchUsers() {
-        this.http.get('http://localhost:3000/users').subscribe((response: any) => {
+        this.http.get('https://drop-backend-seven.vercel.app/users').subscribe((response: any) => {
             this.users = response;
         }, error => {
             console.error('Error fetching users:', error);
@@ -126,7 +126,7 @@ export class UsersComponent implements OnInit {
         this.visible2 = true;
         this.buttontext = 'Please Wait...';
 
-        this.http.post('http://localhost:3000/users', userData).subscribe((response: any) => {
+        this.http.post('https://drop-backend-seven.vercel.app/users', userData).subscribe((response: any) => {
             console.log('User created successfully:', response);
             this.visible = false;
             this.visible2 = false;
@@ -148,7 +148,7 @@ export class UsersComponent implements OnInit {
 
     deleteUser(userId: string) {
         if(confirm('Are you sure you want to delete this user?')) {
-            this.http.delete(`http://localhost:3000/users/${userId}`).subscribe((response: any) => {
+            this.http.delete(`https://drop-backend-seven.vercel.app/users/${userId}`).subscribe((response: any) => {
                 console.log('User deleted successfully:', response);
                 this.fetchUsers();
             }, error => {
@@ -171,7 +171,7 @@ export class UsersComponent implements OnInit {
 		  return;
 		}
 
-		this.http.put(`http://localhost:3000/users/${this.selectedUserId}`, {
+		this.http.put(`https://drop-backend-seven.vercel.app/users/${this.selectedUserId}`, {
 		  name: this.editUserName,
 		  email: this.editUserEmail,
 		  phone: this.editUserPhone

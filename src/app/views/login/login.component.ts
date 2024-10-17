@@ -30,7 +30,7 @@ export class LoginComponent {
       return;
     }
   
-	this.http.post('http://localhost:3000/auth/login', { email: this.userName, password: this.userPassword }).subscribe((response: any) => {
+	this.http.post('https://drop-backend-seven.vercel.app/auth/login', { email: this.userName, password: this.userPassword }).subscribe((response: any) => {
 		
 			console.log(response);
 	}, error => {
@@ -48,7 +48,7 @@ export class LoginComponent {
       return;
     }
 
-    this.http.post<{ access_token: string, parent_folderpath: any, access_usertype: any, userdata:any }>('http://localhost:3000/auth/login', { 
+    this.http.post<{ access_token: string, parent_folderpath: any, access_usertype: any, userdata:any }>('https://drop-backend-seven.vercel.app/auth/login', { 
       email: this.userName, 
       password: this.userPassword 
     }).subscribe({

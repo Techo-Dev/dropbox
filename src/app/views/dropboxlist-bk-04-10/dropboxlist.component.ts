@@ -86,12 +86,12 @@ export class DropboxComponent {
 	}
 	
 	/*getData(): Observable<any> {
-		return this.http.get('http://localhost:3000/');
+		return this.http.get('https://drop-backend-seven.vercel.app/');
 	}*/
 	
 	getData(): Observable<any> { 
 		const body = { basePath: this.root_folderpath };
-		return this.http.post('http://localhost:3000/basefolder', body);
+		return this.http.post('https://drop-backend-seven.vercel.app/basefolder', body);
 	}
   
 	getRootFolders() {
@@ -113,7 +113,7 @@ export class DropboxComponent {
 		//this.parentFolderName = folderPath;
 		const body = { folderPath: folderPath };
 
-		this.http.post('http://localhost:3000/subfolder', body).subscribe((response: any) => {
+		this.http.post('https://drop-backend-seven.vercel.app/subfolder', body).subscribe((response: any) => {
 		  this.subFoldersAndFiles = response;
 		  this.loadThumbnailsFromFiles(response.files);
 		});
@@ -125,7 +125,7 @@ export class DropboxComponent {
 		  if (file.name.endsWith('.png') || file.name.endsWith('.jpg')) {
 			  console.log(file.name);
 			const body = { imgPath: file.path_display };
-			this.http.post('http://localhost:3000/thumbnails', body).subscribe((response: any) => {
+			this.http.post('https://drop-backend-seven.vercel.app/thumbnails', body).subscribe((response: any) => {
 			  if (response && response.fileBinary && response.fileBinary.data) {
 				const binaryData = new Uint8Array(response.fileBinary.data);
 				const blob = new Blob([binaryData], { type: 'image/png' });
@@ -140,7 +140,7 @@ export class DropboxComponent {
 	loadThumbnails() {
 		const path_display = '/abc/Frame.png';
 		const body = { imgPath: path_display };
-		this.http.post('http://localhost:3000/thumbnails', body).subscribe((response: any) => {
+		this.http.post('https://drop-backend-seven.vercel.app/thumbnails', body).subscribe((response: any) => {
 			if (response && response.fileBinary && response.fileBinary.data) {
 			  const binaryData = new Uint8Array(response.fileBinary.data);
 			  const blob = new Blob([binaryData], { type: 'image/png' });
@@ -165,7 +165,7 @@ export class DropboxComponent {
 		this.newFolderName = this.newPhotographerName+' '+this.newWeddingDate+' '+this.newProjectId;
 		
 		const body = { parentFolder: this.parentFolderName, folderName: this.newFolderName };
-		this.http.post('http://localhost:3000/create-folder', body).subscribe(response => {
+		this.http.post('https://drop-backend-seven.vercel.app/create-folder', body).subscribe(response => {
 		  console.log('Folder created:', response);
 		  
 		  this.getData().subscribe((updatedResponse) => {
@@ -197,7 +197,7 @@ export class DropboxComponent {
 		this.newFolderName = this.newPhotographerName+' '+this.newWeddingDate+' '+this.newProjectId;
 		
 		const body = { parentFolder: this.selectedfolder, folderName: this.newFolderName };
-		this.http.post('http://localhost:3000/create-folder', body).subscribe(response => {
+		this.http.post('https://drop-backend-seven.vercel.app/create-folder', body).subscribe(response => {
 		  console.log('Folder created:', response);
 		  
 		  this.getData().subscribe((updatedResponse) => {
@@ -231,7 +231,7 @@ export class DropboxComponent {
 		  formData.append('file', this.selectedFile);
 		  formData.append('uploadFolder', this.uploadtofolder);
 
-		  this.http.post('http://localhost:3000/upload-file', formData).subscribe(response => {
+		  this.http.post('https://drop-backend-seven.vercel.app/upload-file', formData).subscribe(response => {
 			console.log('File uploaded:', response);
 			
 			this.buttontext2 = 'Upload File';

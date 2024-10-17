@@ -116,12 +116,12 @@ export class DropboxComponent {
 	}
 	
 	verifyAccount(){
-		window.location.href = 'http://localhost:3000/dropbox/auth';
+		window.location.href = 'https://drop-backend-seven.vercel.app/dropbox/auth';
 	}
 	
 	checkDropboxtoken(){
 		
-		this.http.get('http://localhost:3000/dropbox/checktoken').subscribe(
+		this.http.get('https://drop-backend-seven.vercel.app/dropbox/checktoken').subscribe(
 		  (response: any) => {
 			console.log(response);
 		  },
@@ -143,7 +143,7 @@ export class DropboxComponent {
 		this.baseFolderName = `${logged_username} ${logged_userphone}-${current.getTime()}`;
 		
 		const body = { parentFolder: '', folderName: this.baseFolderName };
-		this.http.post('http://localhost:3000/create-folder', body).subscribe(
+		this.http.post('https://drop-backend-seven.vercel.app/create-folder', body).subscribe(
 		  (response: any) => {
 			console.log('Folder created:', response);
 			localStorage.setItem('parent_folderpath','/'+this.baseFolderName)
@@ -160,7 +160,7 @@ export class DropboxComponent {
 	}
 	
 	updateUserFolder() {
-		this.http.put(`http://localhost:3000/users/${this.logged_userid}`, {
+		this.http.put(`https://drop-backend-seven.vercel.app/users/${this.logged_userid}`, {
 		  userfolder: this.baseFolderName,
 		}).subscribe(response => {
 			console.log(response);
@@ -187,7 +187,7 @@ export class DropboxComponent {
   loadFolders(path: string) {
     this.visible3 = true;
     const body = { basePath: path };
-    this.http.post('http://localhost:3000/basefolder', body).subscribe(
+    this.http.post('https://drop-backend-seven.vercel.app/basefolder', body).subscribe(
       (response: any) => {
         if (response.error) {
           console.error(response.error);
@@ -254,7 +254,7 @@ export class DropboxComponent {
 		
       if (file.name.endsWith('.png') || file.name.endsWith('.jpg') || file.name.endsWith('.webp')) {
         const body = { imgPath: file.path_display };
-        this.http.post('http://localhost:3000/thumbnails', body).subscribe(
+        this.http.post('https://drop-backend-seven.vercel.app/thumbnails', body).subscribe(
           (response: any) => {
             if (response && response.fileBinary && response.fileBinary.data) {
               const binaryData = new Uint8Array(response.fileBinary.data);
@@ -295,7 +295,7 @@ export class DropboxComponent {
     const parentFolder = this.currentPath[this.currentPath.length - 1].path;
 
     const body = { parentFolder: parentFolder, folderName: this.newFolderName };
-    this.http.post('http://localhost:3000/create-folder', body).subscribe(
+    this.http.post('https://drop-backend-seven.vercel.app/create-folder', body).subscribe(
       (response: any) => {
         //console.log('Folder created:', response);
         this.refreshCurrentFolder();
@@ -328,7 +328,7 @@ export class DropboxComponent {
     const parentFolder = this.selectedfolder || this.currentPath[this.currentPath.length - 1].path;
 
     const body = { parentFolder: parentFolder, folderName: this.newFolderName };
-    this.http.post('http://localhost:3000/create-folder', body).subscribe(
+    this.http.post('https://drop-backend-seven.vercel.app/create-folder', body).subscribe(
       (response: any) => {
         //console.log('Folder created:', response);
         this.refreshCurrentFolder();
@@ -362,7 +362,7 @@ export class DropboxComponent {
       formData.append('file', this.selectedFile);
       formData.append('uploadFolder', this.currentPath[this.currentPath.length - 1].path);
 
-      this.http.post('http://localhost:3000/upload-file', formData).subscribe(
+      this.http.post('https://drop-backend-seven.vercel.app/upload-file', formData).subscribe(
         (response: any) => {
           //console.log('File uploaded:', response);
           this.buttontext2 = 'Upload File';
@@ -403,7 +403,7 @@ export class DropboxComponent {
 		  });
 		  formData.append('uploadFolder', this.currentPath[this.currentPath.length - 1].path);
 
-		  this.http.post('http://localhost:3000/upload-files', formData).subscribe(
+		  this.http.post('https://drop-backend-seven.vercel.app/upload-files', formData).subscribe(
 			(response: any) => {
 			  console.log('Files uploaded:', response);
 			  this.snackBar.open('Files uploaded successfully', 'Close', { duration: 3000 });
@@ -669,7 +669,7 @@ export class DropboxComponent {
 		formData.append('files', fileUpload.file, fileUpload.file.name);
 		formData.append('uploadFolder', this.currentPath[this.currentPath.length - 1].path);
 		
-		const req = new HttpRequest('POST', 'http://localhost:3000/upload-files', formData, {
+		const req = new HttpRequest('POST', 'https://drop-backend-seven.vercel.app/upload-files', formData, {
 		  reportProgress: true
 		});
 		
@@ -709,7 +709,7 @@ export class DropboxComponent {
 	  formData.append('files', fileUpload.file, fileUpload.file.name);
 	  formData.append('uploadFolder', this.currentPath[this.currentPath.length - 1].path);
 	  
-	  const req = new HttpRequest('POST', 'http://localhost:3000/upload-files', formData, {
+	  const req = new HttpRequest('POST', 'https://drop-backend-seven.vercel.app/upload-files', formData, {
 		reportProgress: true
 	  });
 	  

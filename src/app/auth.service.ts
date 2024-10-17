@@ -10,7 +10,7 @@ import { LoginResponse } from './models/login-response.model';
 })
 export class AuthService {
 
-  private loginUrl = 'http://localhost:3000/login'; // Update with your backend login API
+  private loginUrl = 'https://drop-backend-seven.vercel.app/login'; // Update with your backend login API
 
   constructor(private http: HttpClient) {}
 

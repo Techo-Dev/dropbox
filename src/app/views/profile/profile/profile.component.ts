@@ -60,7 +60,7 @@ export class ProfileComponent implements OnInit {
 		this.visible = !this.visible;
 		if(this.editUserPass != ''){
 			
-			this.http.put(`http://localhost:3000/users/${this.selectedUserId}`, {
+			this.http.put(`https://drop-backend-seven.vercel.app/users/${this.selectedUserId}`, {
 			  name: this.editUserName,
 			  password: this.editUserPass,
 			  phone: this.editUserPhone
@@ -75,7 +75,7 @@ export class ProfileComponent implements OnInit {
 			});
 		}else{
 			
-			this.http.put(`http://localhost:3000/users/${this.selectedUserId}`, {
+			this.http.put(`https://drop-backend-seven.vercel.app/users/${this.selectedUserId}`, {
 			  name: this.editUserName,
 			  phone: this.editUserPhone
 			}).subscribe(response => {
