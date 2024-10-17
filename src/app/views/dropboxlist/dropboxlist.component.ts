@@ -215,7 +215,7 @@ export class DropboxComponent {
 			  // Remove the prefix for display
 			  return {
 				...folder,
-				name: folder.name.substring(userPrefix.length)
+				name: folder.name//.substring(userPrefix.length)
 			  };
 			});
 			
@@ -226,7 +226,7 @@ export class DropboxComponent {
 			  // Remove the prefix for display
 			  return {
 				...folder,
-				name: folder.name.substring(userPrefix.length)
+				name: folder.name//.substring(userPrefix.length)
 			  };
 			});
 		  }
