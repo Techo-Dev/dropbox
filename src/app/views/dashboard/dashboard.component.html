@@ -11,6 +11,41 @@
 </c-card>
 
 
+  
+      <c-col xs="12" *ngIf="allowverify">
+	  <form cForm (ngSubmit)="storeAppdata()">
+        <c-card class="mb-4">
+          <c-card-header>
+            <strong>Dropbox Settings</strong>
+          </c-card-header>
+          <c-card-body>
+            <div class="mb-3">
+              <label cLabel for="exampleFormControlInput1">App Key</label>
+              <input cFormControl
+                type="text" 
+				[(ngModel)]="AppKey"
+                name="AppKey" 
+                placeholder="Enter App Key" 
+              />
+            </div>
+            <div class="mb-3">
+              <label cLabel for="exampleFormControlInput1">App Secret</label>
+              <input cFormControl
+                type="text" 
+				[(ngModel)]="AppSecret"
+                name="AppSecret" 
+                placeholder="Enter App Secret" 
+              />
+            </div>
+			<button type="submit" cButton color="primary">
+			{{buttontext}}
+		  </button>
+          </c-card-body>
+        </c-card>
+		</form>
+      </c-col>
+  
+
 <!--c-card class="my-4">
   <c-card-body>
     <c-row>

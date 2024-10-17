@@ -1,6 +1,6 @@
 import { DOCUMENT, NgStyle } from '@angular/common';
 import { Component, DestroyRef, effect, inject, OnInit, Renderer2, signal, WritableSignal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ChartOptions } from 'chart.js';
 import {
   AvatarComponent,
@@ -17,7 +17,7 @@ import {
   ProgressComponent,
   RowComponent,
   TableDirective,
-  TextColorDirective
+  TextColorDirective, InputGroupComponent, InputGroupTextDirective, FormControlDirective, FormLabelDirective, FormCheckInputDirective, ThemeDirective, DropdownComponent, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, DropdownDividerDirective, FormSelectDirective
 } from '@coreui/angular';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { IconDirective } from '@coreui/icons-angular';
@@ -26,6 +26,8 @@ import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.co
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
 import { RouterOutlet, Router } from '@angular/router'; 
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 interface IUser {
   name: string;
@@ -45,7 +47,7 @@ interface IUser {
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.scss'],
   standalone: true,
-  imports: [WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ReactiveFormsModule, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, NgStyle, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent]
+  imports: [WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ReactiveFormsModule,FormsModule, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, NgStyle, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, InputGroupComponent, InputGroupTextDirective, FormControlDirective, FormLabelDirective, FormCheckInputDirective, ThemeDirective, DropdownComponent, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, DropdownDividerDirective, FormSelectDirective, HttpClientModule]
 })
 export class DashboardComponent implements OnInit {
 
@@ -53,17 +55,54 @@ export class DashboardComponent implements OnInit {
   readonly #document: Document = inject(DOCUMENT);
   readonly #renderer: Renderer2 = inject(Renderer2);
   readonly #chartsData: DashboardChartsData = inject(DashboardChartsData);
+  
 	logged_usertype:any = '';
+	AppKey: string = '';
+	AppSecret: string = '';
+	buttontext = 'Save';
+	public allowverify = false;
 	
 	constructor(
-		private router: Router
+		private router: Router,
+		private snackBar: MatSnackBar,
+		private http: HttpClient,
 	){
 		this.logged_usertype = localStorage.getItem('access_usertype');
 	
 		if (!this.logged_usertype) {
 			this.router.navigate(['/login']);
 		}
+		
+		if (this.logged_usertype != 'admin') {
+			 this.allowverify = false;
+		}else{
+			 this.allowverify = true;
+		}
 	}
+	
+	storeAppdata() {
+		if (this.AppKey == '' || this.AppSecret == '') {
+		  this.snackBar.open('All fields are required', 'Close', { duration: 2000 });
+		  return;
+		}
+		
+		this.buttontext = 'Please Wait...';
+
+		const body = { AppKey: this.AppKey, AppSecret: this.AppSecret };
+		this.http.post('http://localhost:3000/dropbox/storeappdata', body).subscribe(
+		  (response: any) => {
+			this.buttontext = 'Save';
+			this.snackBar.open('Data saved!', 'Close', { duration: 2000 });
+		  },
+		  (error) => {
+			
+			this.snackBar.open('Error save data', 'Close', { duration: 2000 });
+			this.buttontext = 'Save';
+		  }
+		);
+	}
+  
+	
   public users: IUser[] = [
     {
       name: 'Yiorgos Avraamu',
@@ -158,8 +197,6 @@ export class DashboardComponent implements OnInit {
   });
 
   ngOnInit(): void {
-	   
-	
     this.initCharts();
     this.updateChartOnColorModeChange();
   }
