@@ -5,7 +5,7 @@ import { RowComponent, ColComponent, TextColorDirective, CardComponent, CardHead
 import { NgStyle, CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DocsExampleComponent } from '@docs-components/public-api';
-import { RouterOutlet } from '@angular/router'; 
+import { RouterOutlet, Router } from '@angular/router'; 
 import { Observable, forkJoin, from, of, throwError, timer } from 'rxjs';
 import { catchError, concatMap, map, mergeMap, tap, retryWhen, delay, scan } from 'rxjs/operators';
 import { IconDirective, IconSetService } from '@coreui/icons-angular';
@@ -77,7 +77,8 @@ export class DropboxComponent {
 	constructor(
 		private http: HttpClient,
 		public iconSet: IconSetService,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private router: Router
 	) {
 		
 	//this.checkDropboxtoken();	
@@ -99,6 +100,10 @@ export class DropboxComponent {
 	}
 	*/
 	this.logged_usertype = localStorage.getItem('access_usertype');
+	
+	if (!this.logged_usertype) {
+		this.router.navigate(['/login']);
+	}
 	
 	if (this.logged_usertype != 'admin') {
 		 this.allowverify = false;
