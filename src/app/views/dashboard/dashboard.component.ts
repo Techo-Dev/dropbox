@@ -25,6 +25,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.component';
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
+import { RouterOutlet, Router } from '@angular/router'; 
 
 interface IUser {
   name: string;
@@ -53,6 +54,15 @@ export class DashboardComponent implements OnInit {
   readonly #renderer: Renderer2 = inject(Renderer2);
   readonly #chartsData: DashboardChartsData = inject(DashboardChartsData);
 
+	constructor(
+		private router: Router
+	){
+		this.logged_usertype = localStorage.getItem('access_usertype');
+	
+		if (!this.logged_usertype) {
+			this.router.navigate(['/login']);
+		}
+	}
   public users: IUser[] = [
     {
       name: 'Yiorgos Avraamu',
@@ -147,6 +157,8 @@ export class DashboardComponent implements OnInit {
   });
 
   ngOnInit(): void {
+	   
+	
     this.initCharts();
     this.updateChartOnColorModeChange();
   }
