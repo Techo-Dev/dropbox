@@ -1,0 +1,173 @@
+<c-row ngPreserveWhitespaces>
+  
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Freelance Photographers</strong>
+        <button (click)="toggleLiveDemo()" cButton class="float-end" color="secondary">Add New</button>
+      </c-card-header>
+      <c-card-body>
+        <table [striped]="true" cTable>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <!--th scope="col">Folder Path</th-->
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.phone }}</td>
+              <!--td>{{ user.userfolder }}</td-->
+              <td>
+                
+                <button (click)="editUser(user)" cButton variant="outline" class="px-4" color="primary">Edit</button>
+                <button (click)="deleteUser(user._id)" cButton variant="outline" class="px-4" color="danger">Delete</button>
+				 
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  
+  <c-col xs="12">
+  
+  </c-col>
+  
+  <c-col xs="12">
+    <c-modal id="liveDemoModal" [visible]="visible" (visibleChange)="handleLiveDemoChange($event)">
+      <form cForm (ngSubmit)="createUser()">
+        <c-modal-header>
+          <c-card-header>
+			<strong>Add New Photographer</strong>
+		  </c-card-header>
+           
+        </c-modal-header>
+        <c-modal-body>
+          <c-col xs="12">
+            <c-card class="mb-4">
+              <c-card-body>
+                <div class="mb-3">
+                  <label cLabel for="name">Name</label>
+                  <input cFormControl
+                         type="text" 
+                         [(ngModel)]="userName"
+                         name="name" 
+                         placeholder="Enter name" 
+                         required />
+                </div>
+                <div class="mb-3">
+                  <label cLabel for="email">Email</label>
+                  <input cFormControl
+                         type="email" 
+                         [(ngModel)]="userEmail"
+                         name="email" 
+                         placeholder="Enter email address" 
+                         required />
+                </div>
+                <div class="mb-3">
+                  <label cLabel for="phone">Phone</label>
+                  <input cFormControl
+                         type="text" 
+                         [(ngModel)]="userPhone"
+                         name="phone" 
+                         placeholder="Enter phone" 
+                         required />
+                </div>
+				
+				<!--div class="mb-3">
+                  <label cLabel for="userfolder">Folder Path</label>
+                   
+					<select name="userfolder" [(ngModel)]="userFolder" aria-label="Default select example" cSelect *ngFor="let folder of folderslist; let i = index">
+						<option value="">--- select ---</option>
+						<option value="{{ folder.path_display || '' }}">{{ folder.name || 'Unnamed Folder' }}</option>
+					</select>	 
+                </div-->
+				
+				<div class="mb-3">
+				  <label cLabel for="userPassword">Password</label>
+				  <input cFormControl
+						 type="password" 
+						 [(ngModel)]="userPassword"
+						 name="uPassword" 
+						 placeholder="Enter password" 
+						 required />
+				</div>
+              </c-card-body>
+            </c-card>
+          </c-col>
+        </c-modal-body>
+        <c-modal-footer>
+          <button type="button" (click)="toggleLiveDemo()" cButton color="secondary">
+            Close
+          </button>
+          <button type="submit" cButton color="primary">
+            <c-spinner [hidden]="!visible2" aria-hidden="true" size="sm" variant="grow"></c-spinner> {{buttontext}}
+          </button>
+        </c-modal-footer>
+      </form>
+    </c-modal>
+	
+	
+	<c-modal id="editUserModal" [visible]="visibleEdit" (visibleChange)="handleEditChange($event)">
+		<form cForm (ngSubmit)="updateUser()">
+			<c-modal-body>
+				<c-col xs="12">
+					<c-card class="mb-4">
+					  <c-card-header>
+						<strong>Edit Info</strong>
+					  </c-card-header>
+					  
+					  <c-card-body>
+							<div class="mb-3">
+							  <label cLabel for="editUserName">Name</label>
+							  <input cFormControl
+									type="text" 
+									[(ngModel)]="editUserName"
+									name="editUName" 
+									placeholder="Enter name" 
+							  />
+							</div>
+							<div class="mb-3">
+							  <label cLabel for="editUserEmail">Email</label>
+							  <input cFormControl
+									type="text" 
+									[(ngModel)]="editUserEmail"
+									name="editUEmail" 
+									placeholder="Enter email address" 
+							  />
+							</div>
+							<div class="mb-3">
+							  <label cLabel for="editUserPhone">Phone</label>
+							  <input cFormControl
+									type="text" 
+									[(ngModel)]="editUserPhone"
+									name="editUPhone" 
+									placeholder="Enter phone" 
+							  />
+							</div>
+					  </c-card-body>
+					</c-card>
+				</c-col>
+			</c-modal-body>
+			<c-modal-footer>
+				<button (click)="toggleEditModal()" cButton color="secondary">
+				  Close
+				</button>
+				<button type="submit" cButton color="primary">
+					Update
+				</button>
+			</c-modal-footer>
+		</form>
+	</c-modal>
+  </c-col>
+  
+</c-row>

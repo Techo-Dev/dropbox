@@ -1,0 +1,60 @@
+<c-row ngPreserveWhitespaces>
+  
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Update Profile</strong> 
+      </c-card-header>
+      <c-card-body>
+	  <form cForm (ngSubmit)="updateUser()">
+		<c-row>
+		
+			<c-col xs="6">
+			<div class="mb-3">
+			  <label cLabel for="email">Email</label>
+			  <p class="form-control" style="background: #ccc;">{{editUserEmail}}</p>
+			</div>
+			</c-col>
+			<c-col xs="6">
+			<div class="mb-3">
+			  <label cLabel for="name">Name</label>
+			  <input cFormControl
+					 type="text" 
+					 [(ngModel)]="editUserName"
+					 name="name" 
+					 placeholder="Enter name" 
+					 required />
+			</div>
+			</c-col>
+			<c-col xs="6">
+			<div class="mb-3">
+			  <label cLabel for="phone">Phone</label>
+			  <input cFormControl
+					 type="text" 
+					 [(ngModel)]="editUserPhone"
+					 name="phone" 
+					 placeholder="Enter phone" />
+			</div>
+			</c-col>
+			<c-col xs="6">
+			<div class="mb-3">
+			  <label cLabel for="userPassword">Password</label>
+			  <input cFormControl
+					 type="password" 
+					 [(ngModel)]="editUserPass"
+					 name="uPassword" 
+					 autocomplete="off"
+					 placeholder="Enter password" />
+			</div>
+			</c-col>
+		</c-row>
+		<button type="submit" cButton color="primary">
+            <c-spinner [hidden]="!visible" aria-hidden="true" size="sm" variant="grow"></c-spinner> {{buttontext}}
+        </button>
+	  </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+   
+  
+</c-row>

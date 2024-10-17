@@ -1,0 +1,190 @@
+<c-row ngPreserveWhitespaces>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Available folder</strong>
+        <button *ngIf="allowverify" (click)="verifyAccount()" cButton class="float-end" color="primary" style="margin-right:5px;">Connect Account</button>
+        <button (click)="toggleLiveDemo()" cButton class="float-end" color="dark" style="margin-right:5px;">+Folder</button>
+        <button *ngIf="currentPath[this.currentPath.length - 1].path != ''" (click)="uploadFile2('')" cButton class="float-end mr-4" color="warning" style="margin-right:5px;">Upload Image</button>
+      </c-card-header>
+      <c-card-body>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li
+              class="breadcrumb-item"
+              *ngFor="let path of currentPath; let i = index; let last = last"
+            >
+              <a href="#" (click)="navigateToPath(i, $event)" *ngIf="!last">{{ path.name }}</a>
+              <span *ngIf="last">{{ path.name }}</span>
+            </li>
+          </ol>
+        </nav>
+        <div *ngIf="visible3" class="loading-indicator" style="text-align:center;">
+          <c-spinner aria-hidden="true" variant="grow"></c-spinner> 
+        </div>
+        <div class="folder-file-container" *ngIf="!visible3">
+          <div class="folders">
+            <mat-card
+              class="folder-card"
+              *ngFor="let folder of folderslist"
+              (click)="openFolder(folder)"
+            >
+              <mat-icon style="height:auto;width:auto;">folder</mat-icon>
+              <mat-card-title style="font-size:14px">{{ folder.name || 'Unnamed Folder' }}</mat-card-title>
+            </mat-card>
+          </div>
+          <div class="files">
+            <mat-card class="file-card" *ngFor="let file of images; let i = index">
+              <img [src]="images[i]" alt="{{ file.name }}" />
+              <mat-card-title>{{ file.name }}</mat-card-title>
+            </mat-card>
+          </div>
+        </div>	
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row> 
+
+<!-- Modal for Creating Folder -->
+<c-modal id="liveDemoModal" [visible]="visible" (visibleChange)="handleLiveDemoChange($event)">
+  <form cForm (ngSubmit)="createFolder()">
+    <c-modal-body>
+      <c-col xs="12">
+        <c-card class="mb-4">
+          <c-card-header>
+            <strong>Photographer Info ( Create New Folder )</strong>
+          </c-card-header>
+          <c-card-body>
+            <div class="mb-3">
+              <label cLabel for="exampleFormControlInput1">Name</label>
+              <input cFormControl
+                type="text" 
+                [(ngModel)]="newPhotographerName"
+                name="folderName" 
+                placeholder="Enter photographer name" 
+              />
+            </div>
+            <div class="mb-3">
+              <label cLabel for="exampleFormControlInput1">Wedding Date</label>
+              <input cFormControl
+                type="date" 
+                [(ngModel)]="newWeddingDate"
+                name="weddingDate" 
+              />
+            </div>
+            <div class="mb-3">
+              <label cLabel for="exampleFormControlInput1">Project ID</label>
+              <input cFormControl
+                type="text" 
+                [(ngModel)]="newProjectId"
+                name="projectId" 
+              />
+            </div>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-modal-body>
+    <c-modal-footer>
+      <button (click)="toggleLiveDemo()" cButton color="secondary">
+        Close
+      </button>
+      <button type="submit" cButton color="primary">
+        <c-spinner [hidden]="!visible2" aria-hidden="true" size="sm" variant="grow"></c-spinner> {{buttontext}}
+      </button>
+    </c-modal-footer>
+  </form>
+</c-modal>
+
+<!-- Modal for Uploading Files -->
+<c-modal id="liveDemoModal2" [visible]="visible4" (visibleChange)="handleLiveDemoChange2($event)">
+  <form cForm>
+    <c-modal-body>
+      <c-col xs="12">
+        <c-card class="mb-4">
+          <c-card-header>
+            <strong>Upload Image</strong>
+          </c-card-header>
+          <c-card-body>
+            <div class="upload-file-form">
+              <label cLabel for="fileUpload">Select Files</label>
+              <input
+                type="file"
+                id="fileUpload"
+                name="files"
+                accept="image/*"
+                multiple
+                cFormControl
+                (change)="onFilesSelected($event)"
+              />
+            </div>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-modal-body>
+    <c-modal-footer>
+      <button (click)="toggleLiveDemo2()" cButton color="secondary">
+        Close
+      </button>
+      <button type="button" (click)="uploadFiles()" cButton color="primary">
+        <c-spinner [hidden]="!visible44" aria-hidden="true" size="sm" variant="grow"></c-spinner> {{buttontext2}}
+      </button>
+    </c-modal-footer>
+  </form>
+</c-modal>
+
+<!-- Upload Progress Modal -->
+<c-modal id="uploadProgressModal" [visible]="visible44" (visibleChange)="handleUploadProgressChange($event)" size="lg">
+  <c-modal-body>
+    <c-col xs="12">
+      <c-card class="mb-4">
+        <c-card-header>
+          <strong>Upload Progress</strong>
+        </c-card-header>
+        <c-card-body>
+          <div *ngIf="selectedFiles.length > 0">
+            <mat-progress-bar mode="determinate" [value]="overallProgress"></mat-progress-bar>
+            <p>{{ overallProgress }}% Completed</p>
+            
+            <!-- Summary of Upload Results -->
+            <div class="upload-summary">
+              <p>Total Files: {{ selectedFiles.length }}</p>
+              <p>Uploaded: {{ uploadedCount }}</p>
+              <p>Failed: {{ failedCount }}</p>
+            </div>
+
+            <!-- Retry All Failed Button -->
+            <div *ngIf="failedCount > 0" class="retry-all">
+              <button (click)="retryAllFailed()" cButton color="warn">
+                Retry All Failed
+              </button>
+            </div>
+
+            <div class="file-progress-list">
+              <div *ngFor="let fileUpload of selectedFiles; let i = index" class="file-progress-item">
+                <span>{{ fileUpload.file.name }}</span>
+                <mat-progress-bar mode="determinate" [value]="fileUpload.progress"></mat-progress-bar>
+                <span>
+                  <mat-icon *ngIf="fileUpload.status === 'success'" color="primary">check_circle</mat-icon>
+                  <mat-icon *ngIf="fileUpload.status === 'error'" color="warn">error</mat-icon>
+                  <mat-icon *ngIf="fileUpload.status === 'uploading'" color="accent">hourglass_bottom</mat-icon>
+                </span>
+                <span *ngIf="fileUpload.status === 'error'">
+                  <button (click)="retryUpload(fileUpload, i)" cButton color="primary">Retry</button>
+                  {{ fileUpload.error }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedFiles.length === 0">
+            <p>No files selected for upload.</p>
+          </div>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-modal-body>
+  <c-modal-footer>
+    <button (click)="toggleUploadProgressModal()" cButton color="secondary">
+      Cancle
+    </button>
+  </c-modal-footer>
+</c-modal>

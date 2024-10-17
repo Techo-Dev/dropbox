@@ -1,0 +1,235 @@
+<c-row ngPreserveWhitespaces>
+   
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Available folder</strong>
+		<button (click)="toggleLiveDemo()" cButton class="float-end" color="dark">+Folder</button>
+      </c-card-header>
+      <c-card-body>
+	  
+		<!--div class="right-side">
+		  <div class="upload-file-form">
+			<h2>Upload a File</h2>
+			<input type="file" (change)="onFileSelected($event)" />
+			<button (click)="uploadFile()">Upload File</button>
+		  </div>
+		</div>
+        
+		<div class="folders-list">
+		  <h2>Folders</h2>
+		  <ul>
+			<li *ngFor="let folder of folderslist; let i = index" (click)="loadSubFolder(folder.path_display)">
+			  {{ i + 1 }} - {{ folder.name || 'Unnamed Folder' }}
+			</li>
+		  </ul>
+		</div-->
+
+          <table [striped]="true" cTable>
+				<thead>
+					<tr>
+					  <th scope="col">#</th>
+					  <th scope="col">Folder Name</th>
+					  <!--th scope="col">Folder Path</th-->
+					  <th scope="col" style="text-align:center">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				<tr *ngFor="let folder of folderslist; let i = index">
+				  <td scope="row">{{ i + 1 }}</td>
+				  <td>{{ folder.name || 'Unnamed Folder' }}</td>
+				  <!--td>{{ folder.path_display || '-' }}</td-->
+				  <td>
+					<button (click)="toggleLiveDemo3(folder.path_display)" cButton class="float-end" color="secondary">+Sub Folder</button>
+					
+					<button (click)="loadSubFolder(folder.path_display)" cButton class="float-end" color="primary" style="margin-right:5px;">Open</button>
+					
+					<button (click)="uploadFile2(folder.path_display)" cButton class="float-end mr-4" color="warning" style="margin-right:5px;">Upload Image</button>
+				  </td>
+				</tr>
+				</tbody>
+          </table>
+		  <div [hidden]="!visible3" style="text-align: center;">
+			<c-spinner aria-hidden="true" variant="grow"></c-spinner>
+		  </div>
+		  <div class="sub-folders-list" *ngIf="subFoldersAndFiles.folders">
+			  <h3>Sub Folders</h3>
+			  
+			  <table [striped]="true" cTable>
+				<thead>
+					<tr>
+					  <th scope="col">#</th>
+					  <th scope="col">Sub Folder</th>
+					  <th scope="col">Sub Folder Path</th>
+					  <th scope="col" style="text-align:center">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				<tr *ngFor="let folder of subFoldersAndFiles.folders; let i = index">
+				  <td scope="row">{{ i + 1 }}</td>
+				  <td>{{ folder.name || 'Unnamed Folder' }}</td>
+				  <td>{{ folder.path_display || '-' }}</td>
+				  <td></td>
+				</tr>
+				</tbody>
+			  </table>
+			</div>
+
+			<div class="files-list" *ngIf="subFoldersAndFiles.files">
+			  <h3>Files</h3>
+			  <table [striped]="true" cTable>
+				<thead>
+					<tr>
+					  <th scope="col">#</th>
+					  <th scope="col">Preview</th>
+					  <th scope="col">Sub Folder</th>
+					  <th scope="col">Sub Folder Path</th>
+					  <th scope="col" style="text-align:center">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				<tr *ngFor="let file of subFoldersAndFiles.files; let i = index">
+				  <td scope="row">{{ i + 1 }}</td>
+				  <td>
+					 <img [src]="images[i]" alt="Thumbnail" width="100" height="100">
+				  </td>
+				  <td>{{ file.name || 'Unnamed file' }}</td>
+				  <td>{{ file.path_display || '-' }}</td>
+				  <td></td>
+				</tr>
+				</tbody>
+			  </table>
+			</div>
+			<!--div class="image-gallery" *ngIf="images.length > 0">
+			  <div *ngFor="let image of images">
+				<img [src]="image" alt="Thumbnail" width="100" height="100">
+			  </div>
+			</div-->
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row> 
+
+<c-modal id="liveDemoModal" [visible]="visible" (visibleChange)="handleLiveDemoChange($event)">
+	<form cForm (ngSubmit)="createFolder()">
+		<c-modal-body>
+			<c-col xs="12">
+				<c-card class="mb-4">
+				  <c-card-header>
+					<strong>Photographer Info ( Create New Folder )</strong>
+				  </c-card-header>
+				  <c-card-body>
+						<div class="mb-3">
+						  <label cLabel for="exampleFormControlInput1">Name</label>
+						  <input cFormControl
+								type="text" 
+								[(ngModel)]="newPhotographerName"
+								name="folderName" 
+								placeholder="Enter photographer name" 
+						  />
+						</div>
+						<div class="mb-3">
+						  <label cLabel for="exampleFormControlInput1">Wedding Date</label>
+						  <input cFormControl
+								type="date" 
+								[(ngModel)]="newWeddingDate"
+								name="weddingDate" 
+						  />
+						</div>
+						<div class="mb-3">
+						  <label cLabel for="exampleFormControlInput1">Project ID</label>
+						  <input cFormControl
+								type="text" 
+								[(ngModel)]="newProjectId"
+								name="projectId" 
+						  />
+						</div>
+				  </c-card-body>
+				</c-card>
+			</c-col>
+		</c-modal-body>
+		<c-modal-footer>
+			<button (click)="toggleLiveDemo()" cButton color="secondary">
+			  Close
+			</button>
+			<button type="submit" cButton color="primary">
+			<c-spinner [hidden]="!visible2" aria-hidden="true" size="sm" variant="grow"></c-spinner> {{buttontext}}</button>
+		</c-modal-footer>
+	</form>
+</c-modal>
+
+<c-modal id="liveDemoModal3" [visible]="visible5" (visibleChange)="handleLiveDemoChange3($event)">
+	<form cForm (ngSubmit)="createSubFolder()">
+		<c-modal-body>
+			<c-col xs="12">
+				<c-card class="mb-4">
+				  <c-card-header>
+					<strong>Photographer Info ( Create New Sub Folder )</strong>
+				  </c-card-header>
+				  <c-card-body>
+						<div class="mb-3">
+						  <label cLabel for="exampleFormControlInput1">Name</label>
+						  <input cFormControl
+								type="text" 
+								[(ngModel)]="newPhotographerName"
+								name="folderName" 
+								placeholder="Enter photographer name" 
+						  />
+						</div>
+						<div class="mb-3">
+						  <label cLabel for="exampleFormControlInput1">Wedding Date</label>
+						  <input cFormControl
+								type="date" 
+								[(ngModel)]="newWeddingDate"
+								name="weddingDate" 
+						  />
+						</div>
+						<div class="mb-3">
+						  <label cLabel for="exampleFormControlInput1">Project ID</label>
+						  <input cFormControl
+								type="text" 
+								[(ngModel)]="newProjectId"
+								name="projectId" 
+						  />
+						</div>
+				  </c-card-body>
+				</c-card>
+			</c-col>
+		</c-modal-body>
+		<c-modal-footer>
+			<button (click)="toggleLiveDemo3('')" cButton color="secondary">
+			  Close
+			</button>
+			<button type="submit" cButton color="primary">
+			<c-spinner [hidden]="!visible2" aria-hidden="true" size="sm" variant="grow"></c-spinner> {{buttontext}}</button>
+		</c-modal-footer>
+	</form>
+</c-modal>
+
+<c-modal id="liveDemoModal2" [visible]="visible4" (visibleChange)="handleLiveDemoChange2($event)">
+	<form cForm>
+		<c-modal-body>
+			<c-col xs="12">
+				<c-card class="mb-4">
+				  <c-card-header>
+					<strong>Upload Image</strong>
+				  </c-card-header>
+				  <c-card-body>
+					<div class="upload-file-form">
+						<label cLabel for="exampleFormControlInput11">Select a File</label>
+						<input type="file" accept="image/*" cFormControl (change)="onFileSelected($event)" />
+					</div>
+				  </c-card-body>
+				</c-card>
+			</c-col>
+		</c-modal-body>
+		<c-modal-footer>
+			<button (click)="toggleLiveDemo2()" cButton color="secondary">
+			  Close
+			</button>
+			<button type="button" (click)="uploadFile()" cButton color="primary">
+			<c-spinner [hidden]="!visible44" aria-hidden="true" size="sm" variant="grow"></c-spinner> {{buttontext2}}
+			</button>
+		</c-modal-footer>
+	</form>
+</c-modal>
