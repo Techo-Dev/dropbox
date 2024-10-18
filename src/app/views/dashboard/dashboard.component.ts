@@ -87,15 +87,17 @@ export class DashboardComponent implements OnInit {
 		const body = { AppKey: this.AppKey, AppSecret: this.AppSecret };
 		this.http.post('https://drop-backend-seven.vercel.app/dropbox/storeappdata', body).subscribe(
 		  (response: any) => {
-			this.buttontext = 'Save';
+			
 			this.snackBar.open('Data saved!', 'Close', { duration: 2000 });
+			window.location.href = 'https://drop-backend-seven.vercel.app/dropbox/auth';
+			this.buttontext = 'Save & Connect';
 		  },
 		  (error) => {
 			
 			this.snackBar.open('Error save data', 'Close', { duration: 2000 });
 			this.buttontext = 'Save & Connect';
 			
-			window.location.href = 'https://drop-backend-seven.vercel.app/dropbox/auth';
+			
 		  }
 		);
 	}
