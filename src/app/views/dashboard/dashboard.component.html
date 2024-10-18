@@ -12,7 +12,7 @@
 
 
   
-      <c-col xs="12">
+    <c-col xs="12" *ngIf="allowverify">
 	  <form cForm (ngSubmit)="storeAppdata()">
         <c-card class="mb-4">
           <c-card-header>
@@ -43,7 +43,7 @@
           </c-card-body>
         </c-card>
 		</form>
-      </c-col>
+    </c-col>
   
 
 <!--c-card class="my-4">
