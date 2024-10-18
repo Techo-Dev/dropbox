@@ -3,7 +3,7 @@
     <c-card class="mb-4">
       <c-card-header>
         <strong>Available folder</strong>
-        <button *ngIf="allowverify" (click)="verifyAccount()" cButton class="float-end" color="primary" style="margin-right:5px;">Connect Account</button>
+        <!--button *ngIf="allowverify" (click)="verifyAccount()" cButton class="float-end" color="primary" style="margin-right:5px;">Connect Account</button-->
         <button (click)="toggleLiveDemo()" cButton class="float-end" color="dark" style="margin-right:5px;">+Folder</button>
         <button *ngIf="currentPath[this.currentPath.length - 1].path != ''" (click)="uploadFile2('')" cButton class="float-end mr-4" color="warning" style="margin-right:5px;">Upload Image</button>
       </c-card-header>

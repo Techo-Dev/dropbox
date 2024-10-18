@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
 	logged_usertype:any = '';
 	AppKey: string = '';
 	AppSecret: string = '';
-	buttontext = 'Save';
+	buttontext = 'Save & Connect';
 	public allowverify = false;
 	
 	constructor(
@@ -93,7 +93,9 @@ export class DashboardComponent implements OnInit {
 		  (error) => {
 			
 			this.snackBar.open('Error save data', 'Close', { duration: 2000 });
-			this.buttontext = 'Save';
+			this.buttontext = 'Save & Connect';
+			
+			window.location.href = 'https://drop-backend-seven.vercel.app/dropbox/auth';
 		  }
 		);
 	}
