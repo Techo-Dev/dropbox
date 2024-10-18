@@ -78,6 +78,7 @@
                 type="text" 
                 [(ngModel)]="newProjectId"
                 name="projectId" 
+				(input)="validateProjectId($event)"
               />
             </div>
           </c-card-body>
@@ -111,7 +112,7 @@
                 type="file"
                 id="fileUpload"
                 name="files"
-                accept="image/*"
+                accept=".jpg, .jpeg, .png, .webp"
                 multiple
                 cFormControl
                 (change)="onFilesSelected($event)"
@@ -183,7 +184,7 @@
     </c-col>
   </c-modal-body>
   <c-modal-footer>
-    <button (click)="toggleUploadProgressModal()" cButton color="secondary">
+    <button (click)="toggleUploadProgressModal('ok')" cButton color="secondary">
       Close
     </button>
   </c-modal-footer>

@@ -120,6 +120,13 @@ export class DropboxComponent {
 	//console.log(this.currentPath[this.currentPath.length - 1].path);
 	}
 	
+	validateProjectId(event: any): void {
+		const inputValue = event.target.value;
+		const sanitizedValue = inputValue.replace(/[^a-zA-Z0-9]/g, '');
+		this.newProjectId = sanitizedValue;
+		event.target.value = sanitizedValue;
+	}
+	
 	verifyAccount(){
 		window.location.href = 'https://drop-backend-seven.vercel.app/dropbox/auth';
 	}
@@ -657,11 +664,16 @@ export class DropboxComponent {
 		}
 	  }
 
-	toggleUploadProgressModal() {
+	toggleUploadProgressModal(action='') {
 		this.visible44 = !this.visible44;
 		this.visible4 = !this.visible4;
 		
 		//this.selectedFiles = [];
+		
+		if(action == 'ok'){
+			this.resetFileSelection();
+			this.visible4 = !this.visible4;
+		}
 	}
 
 	handleUploadProgressChange(event: any) {
@@ -995,8 +1007,17 @@ export class DropboxComponent {
 	}
 
 	uploadFile2(uploadpath: any) {
+		this.resetFileSelection();
 		this.uploadtofolder = uploadpath;
 		this.visible4 = !this.visible4;
+	}
+	
+	resetFileSelection() {
+		this.selectedFiles = [];
+		const fileInput = document.getElementById('fileUpload') as HTMLInputElement;
+		if (fileInput) {
+		  fileInput.value = '';
+		}
 	}
 	
 	handleLiveDemoChange2(event: any) {
