@@ -231,7 +231,7 @@ export class DropboxComponent {
 			});
 		  }
 		
-		  this.folderslist = response.result.entries.filter((item: any) => item['.tag'] === 'folder');
+		  //this.folderslist = response.result.entries.filter((item: any) => item['.tag'] === 'folder');
 		  
 		  
 		  this.subFoldersAndFiles = response.result.entries.filter((item: any) => item['.tag'] === 'file');
