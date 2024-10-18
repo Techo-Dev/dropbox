@@ -89,7 +89,7 @@ export class DashboardComponent implements OnInit {
 		this.buttontext = 'Please Wait...';
 
 		const body = { AppKey: this.AppKey, AppSecret: this.AppSecret };
-		this.http.post('https://drop-backend-seven.vercel.app/storeappdata', body).subscribe(
+		this.http.post('https://drop-backend-seven.vercel.app/dropbox/storeappdata', body).subscribe(
 		  (response: any) => {
 			this.buttontext = 'Save';
 			this.snackBar.open('Data saved!', 'Close', { duration: 2000 });
