@@ -6,8 +6,8 @@ import { NgStyle, CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DocsExampleComponent } from '@docs-components/public-api';
 import { RouterOutlet, Router } from '@angular/router'; 
-import { Observable, forkJoin, from, of, throwError, timer } from 'rxjs';
-import { catchError, concatMap, map, mergeMap, tap, retryWhen, delay, scan } from 'rxjs/operators';
+import { Observable, forkJoin, from, of, throwError, timer, Subject, Subscription } from 'rxjs';
+import { catchError, concatMap, switchMap, exhaustMap, map, mergeMap, tap, retryWhen, delay, scan, takeUntil } from 'rxjs/operators';
 import { IconDirective, IconSetService } from '@coreui/icons-angular';
 import { brandSet, flagSet, freeSet } from '@coreui/icons';
 import { MatCardModule } from '@angular/material/card';
@@ -33,6 +33,9 @@ interface FileUpload {
   imports: [RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, TableDirective, TableColorDirective, TableActiveDirective, BorderDirective, AlignDirective, ReactiveFormsModule, FormsModule, CommonModule, HttpClientModule, RouterOutlet, FormDirective, FormLabelDirective, FormControlDirective, ButtonDirective, NgStyle,ModalBodyComponent,ModalComponent,ModalFooterComponent, ModalHeaderComponent,ModalTitleDirective, SpinnerComponent, MatCardModule, MatIconModule, MatProgressSpinnerModule, MatSnackBarModule, MatProgressBarModule]
 })
 export class DropboxComponent {
+	
+	private stop$ = new Subject<void>();
+	subscription: Subscription | null = null;
    
 	title = 'dropbox-app';
 	folderslist: any[] = [];
@@ -184,6 +187,7 @@ export class DropboxComponent {
 	navigateToPath(index: number, event: Event) {
 	  event.preventDefault();
 	  console.log(`Navigating to path index: ${index}`);
+	  this.stopLoadingThumbnails();
 
 	  this.currentPath = this.currentPath.slice(0, index + 1);
 	  const path = this.currentPath[index].path;
@@ -290,6 +294,7 @@ export class DropboxComponent {
     });
   }
   
+  /*
 	loadThumbnailsFromFiles(files: any[]) {
 		this.images = [];
 		from(files)
@@ -323,8 +328,71 @@ export class DropboxComponent {
 		  })
 		)
 		.subscribe((imageUrl) => this.images.push(imageUrl));
-	}
+	}*/
 
+	loadThumbnailsFromFiles(files: any[]) {
+    this.images = [];
+    this.resetStopSignal();
+
+    const observable$ = from(files).pipe(
+      takeUntil(this.stop$),
+      concatMap((file) => this.processFile(file)),
+      tap({
+        complete: () => console.log('Processing completed or stopped.'),
+      })
+    );
+
+    this.subscription = observable$.subscribe({
+      next: (imageUrl) => this.images.push(imageUrl),
+      error: (err) => console.error('Error in API stream:', err),
+    });
+  }
+  
+  private resetStopSignal() {
+    
+    this.stop$ = new Subject<void>();
+  }
+  
+  private processFile(file: any) {
+    if (
+      file.name.endsWith('.png') ||
+      file.name.endsWith('.jpg') ||
+      file.name.endsWith('.webp') ||
+      file.name.endsWith('.ARW') ||
+      file.name.endsWith('.DNG')
+    ) {
+      const body = { imgPath: file.path_display };
+      return this.http.post('https://drop-backend-seven.vercel.app/thumbnails', body).pipe(
+        map((response: any) => {
+          if (response?.fileBinary?.data) {
+            const binaryData = new Uint8Array(response.fileBinary.data);
+            const blob = new Blob([binaryData], { type: 'image/png' });
+            return URL.createObjectURL(blob);
+          }
+          return file.name;
+        }),
+        catchError((error) => {
+          console.error('Error loading thumbnail for file:', file.name, error);
+          return of();
+        })
+      );
+    } else {
+      return of();
+    }
+  }
+
+  stopLoadingThumbnails() {
+    console.log('Stopping API calls...');
+    this.stop$.next();
+    this.stop$.complete();
+
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+      console.log('API process stopped.');
+    }
+  }
+  
   getFileThumbnail(file: any): string {
     const index = this.subFoldersAndFiles.files.indexOf(file);
     return this.images[index] || 'assets/default-thumbnail.png';
