@@ -1009,6 +1009,7 @@ export class DropboxComponent {
 	uploadFile2(uploadpath: any) {
 		this.resetFileSelection();
 		this.uploadtofolder = uploadpath;
+		this.buttontext2 = 'Upload File';
 		this.visible4 = !this.visible4;
 	}
 	
