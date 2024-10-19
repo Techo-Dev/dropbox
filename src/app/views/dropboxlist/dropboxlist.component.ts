@@ -314,11 +314,11 @@ export class DropboxComponent {
 				}),
 				catchError((error) => {
 				  console.error('Error loading thumbnail for file:', file.name, error);
-				  return of('assets/default-thumbnail.png');
+				  return of(file.name);
 				})
 			  );
 			} else {
-			  return of('assets/default-thumbnail.png'); // Handle non-image files
+			  return of(); // Handle non-image files
 			}
 		  })
 		)
