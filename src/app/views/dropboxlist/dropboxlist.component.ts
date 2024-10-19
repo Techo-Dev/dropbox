@@ -356,7 +356,7 @@ export class DropboxComponent {
       },
       (error) => {
         //console.error(error);
-        this.snackBar.open('Error creating folder', 'Close', { duration: 2000 });
+        this.snackBar.open('Creating folder Conflict! Please try with other name.', 'Close', { duration: 2500 });
         this.buttontext = 'Create';
         this.visible2 = false;
       }
