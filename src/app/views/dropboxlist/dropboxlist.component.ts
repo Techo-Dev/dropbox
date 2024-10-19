@@ -58,7 +58,7 @@ export class DropboxComponent {
 	public visible2 = false;
 	public visible3 = false;
 	buttontext = 'Create';
-	buttontext2 = 'Upload File';
+	buttontext2 = 'Upload Files';
 	 
 	// Overall progress
 	overallProgress: number = 0;
@@ -260,7 +260,7 @@ export class DropboxComponent {
     this.loadFolders(basePath);
   }
 
-  loadThumbnailsFromFiles(files: any[]) {
+  loadThumbnailsFromFiles2(files: any[]) {
     this.images = [];
     files.forEach(file => {
 		
@@ -289,6 +289,41 @@ export class DropboxComponent {
       }
     });
   }
+  
+	loadThumbnailsFromFiles(files: any[]) {
+		this.images = [];
+		from(files)
+		.pipe(
+		  concatMap((file) => {
+			if (
+			  file.name.endsWith('.png') ||
+			  file.name.endsWith('.jpg') ||
+			  file.name.endsWith('.webp') ||
+			  file.name.endsWith('.ARW') ||
+			  file.name.endsWith('.DNG')
+			) {
+			  const body = { imgPath: file.path_display };
+			  return this.http.post('https://drop-backend-seven.vercel.app/thumbnails', body).pipe(
+				map((response: any) => {
+				  if (response && response.fileBinary && response.fileBinary.data) {
+					const binaryData = new Uint8Array(response.fileBinary.data);
+					const blob = new Blob([binaryData], { type: 'image/png' });
+					return URL.createObjectURL(blob);
+				  }
+				  return 'assets/default-thumbnail.png';
+				}),
+				catchError((error) => {
+				  console.error('Error loading thumbnail for file:', file.name, error);
+				  return of('assets/default-thumbnail.png');
+				})
+			  );
+			} else {
+			  return of('assets/default-thumbnail.png'); // Handle non-image files
+			}
+		  })
+		)
+		.subscribe((imageUrl) => this.images.push(imageUrl));
+	}
 
   getFileThumbnail(file: any): string {
     const index = this.subFoldersAndFiles.files.indexOf(file);
@@ -1009,7 +1044,7 @@ export class DropboxComponent {
 	uploadFile2(uploadpath: any) {
 		this.resetFileSelection();
 		this.uploadtofolder = uploadpath;
-		this.buttontext2 = 'Upload File';
+		this.buttontext2 = 'Upload Files';
 		this.visible4 = !this.visible4;
 	}
 	
