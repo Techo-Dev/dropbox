@@ -264,7 +264,7 @@ export class DropboxComponent {
     this.images = [];
     files.forEach(file => {
 		
-      if (file.name.endsWith('.png') || file.name.endsWith('.jpg') || file.name.endsWith('.webp')) {
+      if (file.name.endsWith('.png') || file.name.endsWith('.jpg') || file.name.endsWith('.webp') || file.name.endsWith('.ARW') || file.name.endsWith('.DNG')) {
         const body = { imgPath: file.path_display };
         this.http.post('https://drop-backend-seven.vercel.app/thumbnails', body).subscribe(
           (response: any) => {
