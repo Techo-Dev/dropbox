@@ -285,7 +285,7 @@ export class DropboxComponent {
         );
       } else {
         // For non-image files, set a default thumbnail
-        this.images.push('assets/default-thumbnail.png');
+        //this.images.push('assets/default-thumbnail.png');
       }
     });
   }
