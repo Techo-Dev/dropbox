@@ -109,3 +109,19 @@
 .mat-snack-bar-container {
   z-index: 2000 !important;
 }
+
+.customdropdown{
+	display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--cui-body-color);
+    appearance: none;
+    background-color: var(--cui-body-bg);
+    background-clip: padding-box;
+    border: var(--cui-border-width) solid var(--cui-border-color);
+    border-radius: var(--cui-border-radius);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
