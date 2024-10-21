@@ -44,6 +44,9 @@ export class DropboxComponent {
 	newPhotographerName: string = '';
 	newWeddingDate: string = '';
 	newProjectId: string = '';
+	newProjectType: string = '';
+	yourRole: string = ''; 
+	
 	selectedFile: File | null = null;
 	images: any[] = [];
 	parentFolderName = '';
@@ -220,6 +223,7 @@ export class DropboxComponent {
 		  
 		  if (this.logged_usertype != 'admin') {
 		  // Filter folders that start with the userPrefix
+			/*
 			this.folderslist = response.result.entries.filter(
 				(item: any) => item['.tag'] === 'folder' && item.name.startsWith(userPrefix)
 			).map((folder: any) => {
@@ -227,6 +231,19 @@ export class DropboxComponent {
 			  return {
 				...folder,
 				name: folder.name//.substring(userPrefix.length)
+			  };
+			});
+			*/
+			
+			const username = localStorage.getItem('logged_username');
+			
+			this.folderslist = response.result.entries.filter(
+				(item: any) => item['.tag'] === 'folder' && item.name.includes(`- ${username} -`)
+			).map((folder: any) => {
+			 
+			  return {
+				...folder,
+				name: folder.name
 			  };
 			});
 			
@@ -399,14 +416,19 @@ export class DropboxComponent {
   }
   
   createFolder() {
-    if (this.newPhotographerName == '' || this.newWeddingDate == '' || this.newProjectId == '') {
+    if (this.newPhotographerName == '' || this.newWeddingDate == '' || this.newProjectId == '' || this.newProjectType === '' || this.yourRole === '') {
       this.snackBar.open('All fields are required', 'Close', { duration: 2000 });
       return;
     }
     this.visible2 = true;
     this.buttontext = 'Please Wait...';
+	
+	const logged_username = localStorage.getItem('logged_username');
+	const formattedDate = formatDate(this.newWeddingDate, 'MMMM d, yyyy', 'en-US');
+	this.newFolderName = `${formattedDate} - ${this.newProjectType} - (ID-${this.newProjectId}) - ${logged_username} - ${this.yourRole}`;
+	
 
-    this.newFolderName = `${this.logged_userid}_${this.newPhotographerName} ${this.newWeddingDate} ${this.newProjectId}`;
+    //this.newFolderName = `${this.logged_userid}_${this.newPhotographerName} ${this.newWeddingDate} ${this.newProjectId}`;
     const parentFolder = this.currentPath[this.currentPath.length - 1].path;
 
     const body = { parentFolder: parentFolder, folderName: this.newFolderName };

@@ -114,8 +114,11 @@ export class UsersComponent implements OnInit {
             return;
         }
 		//this.userFolderName = this.userName+this.userPhone;
+		
+		const uniqueUserName = this.generateUniqueUserName(this.userName, this.users);
+		
         const userData = {
-            name: this.userName,
+            name: uniqueUserName,//this.userName,
             email: this.userEmail,
             phone: this.userPhone,
             userfolder: '',//this.userFolder,
@@ -145,6 +148,25 @@ export class UsersComponent implements OnInit {
             alert(error.error.message);
         });
     }
+	
+	generateUniqueUserName(name: string, users: any[]): string {
+	  let newName = name;
+	  let counter = 1;
+
+	  const matchingUsers = users.filter(user => user.name.startsWith(name));
+
+	  if (matchingUsers.length > 0) {
+
+		const numbers = matchingUsers
+		  .map(user => parseInt(user.name.replace(name, '').trim()) || 0)
+		  .sort((a, b) => a - b);
+
+		counter = numbers[numbers.length - 1] + 1;
+		newName = `${name} ${counter}`;
+	  }
+
+	  return newName;
+	}
 
     deleteUser(userId: string) {
         if(confirm('Are you sure you want to delete this user?')) {
@@ -170,9 +192,12 @@ export class UsersComponent implements OnInit {
 		if (this.editUserName === '' || this.editUserEmail === '' || this.editUserPhone === '') {
 		  return;
 		}
+		
+		const otherUsers = this.users.filter(user => user._id !== this.selectedUserId);
+		const uniqueUserName = this.generateUniqueUserName(this.editUserName, otherUsers);
 
 		this.http.put(`https://drop-backend-seven.vercel.app/users/${this.selectedUserId}`, {
-		  name: this.editUserName,
+		  name: uniqueUserName,//this.editUserName,
 		  email: this.editUserEmail,
 		  phone: this.editUserPhone
 		}).subscribe(response => {

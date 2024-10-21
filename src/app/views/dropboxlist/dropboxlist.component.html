@@ -55,8 +55,23 @@
             <strong>Photographer Info ( Create New Folder )</strong>
           </c-card-header>
           <c-card-body>
+		  
+			<div class="mb-3">
+				<label cLabel for="projectType">Project Type</label>
+				<select 
+				  aria-label="Default select example" 
+				  cFormControl 
+				  class="mb-3" 
+				  sizing="lg"
+				  [(ngModel)]="newProjectType" 
+				  name="projectType">
+				  <option value="Wedding">Wedding</option>
+				  <option value="Engagement">Engagement</option>
+				</select>
+			</div>
+		  
             <div class="mb-3">
-              <label cLabel for="exampleFormControlInput1">Name</label>
+              <label cLabel for="exampleFormControlInput1">Client Name</label>
               <input cFormControl
                 type="text" 
                 [(ngModel)]="newPhotographerName"
@@ -64,14 +79,7 @@
                 placeholder="Enter photographer name" 
               />
             </div>
-            <div class="mb-3">
-              <label cLabel for="exampleFormControlInput1">Wedding Date</label>
-              <input cFormControl
-                type="date" 
-                [(ngModel)]="newWeddingDate"
-                name="weddingDate" 
-              />
-            </div>
+			
             <div class="mb-3">
               <label cLabel for="exampleFormControlInput1">Project ID</label>
               <input cFormControl
@@ -81,6 +89,28 @@
 				(input)="validateProjectId($event)"
               />
             </div>
+            <div class="mb-3">
+              <label cLabel for="exampleFormControlInput1">Wedding/Engagement Date</label>
+              <input cFormControl
+                type="date" 
+                [(ngModel)]="newWeddingDate"
+                name="weddingDate" 
+              />
+            </div>
+			
+			<div class="mb-3">
+				<label cLabel for="role">Your Role</label>
+				<select 
+				  aria-label="Default select example" 
+				  cFormControl 
+				  class="mb-3" 
+				  sizing="lg"
+				  [(ngModel)]="yourRole" 
+				  name="role">
+				  <option value="Lead">Lead</option>
+				  <option value="Second">Second</option>
+				</select>
+			</div>
           </c-card-body>
         </c-card>
       </c-col>
