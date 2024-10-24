@@ -81,6 +81,8 @@ export class DropboxComponent {
 	public allowverify = false;
 	
 	basefolder = '';
+	
+	uploadFolder = '';
 
 	constructor(
 		private http: HttpClient,
@@ -551,7 +553,8 @@ export class DropboxComponent {
 
       const formData = new FormData();
       formData.append('file', this.selectedFile);
-      formData.append('uploadFolder', this.currentPath[this.currentPath.length - 1].path);
+      //formData.append('uploadFolder', this.currentPath[this.currentPath.length - 1].path);
+	  formData.append('uploadFolder', this.uploadFolder);
 
       this.http.post('https://drop-backend-seven.vercel.app/upload-file', formData).subscribe(
         (response: any) => {
