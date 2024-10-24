@@ -40,6 +40,10 @@
             </mat-card>
           </div>
         </div>	
+		
+		<div *ngIf="thumbnailLoading" class="loading-indicator" style="text-align:center;">
+		  <c-spinner color="primary"></c-spinner>
+		</div>
       </c-card-body>
     </c-card>
   </c-col>

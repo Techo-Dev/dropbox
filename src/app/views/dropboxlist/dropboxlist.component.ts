@@ -37,6 +37,8 @@ export class DropboxComponent {
 	private stop$ = new Subject<void>();
 	subscription: Subscription | null = null;
    
+    public thumbnailLoading = false;
+   
 	title = 'dropbox-app';
 	folderslist: any[] = [];
 	subFoldersAndFiles: any = {};
@@ -188,6 +190,7 @@ export class DropboxComponent {
 	}
 	
 	navigateToPath(index: number, event: Event) {
+	  this.thumbnailLoading = false;
 	  event.preventDefault();
 	  console.log(`Navigating to path index: ${index}`);
 	  this.stopLoadingThumbnails();
@@ -351,11 +354,19 @@ export class DropboxComponent {
     this.images = [];
     this.resetStopSignal();
 
+	if (files.length > 0) {
+      this.thumbnailLoading = true;
+    }
+	
     const observable$ = from(files).pipe(
       takeUntil(this.stop$),
       concatMap((file) => this.processFile(file)),
       tap({
-        complete: () => console.log('Processing completed or stopped.'),
+        //complete: () => console.log('Processing completed or stopped.'),
+		complete: () => {
+          this.thumbnailLoading = false; // Hide loader on completion
+          console.log('Processing completed or stopped.');
+        },
       })
     );
 
