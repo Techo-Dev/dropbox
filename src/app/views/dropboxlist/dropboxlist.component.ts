@@ -987,6 +987,8 @@ export class DropboxComponent {
   private updateOverallProgress() {
     const total = this.selectedFiles.length;
     const uploaded = this.selectedFiles.filter(f => f.status === 'success').length;
+	this.uploadedCount = uploaded;
+	
     const uploading = this.selectedFiles.filter(f => f.status === 'uploading').length;
     //this.overallProgress = Math.round(((uploaded + uploading) / total) * 100);
     this.overallProgress = Math.round(((uploaded) / total) * 100);
@@ -1142,7 +1144,9 @@ export class DropboxComponent {
 			},
 			() => {
 			  // Calculate counts
-			  this.uploadedCount += failedUploads.filter(f => f.status === 'success').length;
+			  //this.uploadedCount += failedUploads.filter(f => f.status === 'success').length;
+			  this.uploadedCount = this.selectedFiles.filter(f => f.status === 'success').length;
+			  
 			  this.failedCount += failedUploads.filter(f => f.status === 'error').length;
 
 			  if (this.failedCount > 0) {
