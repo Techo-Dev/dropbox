@@ -789,6 +789,8 @@ export class DropboxComponent {
 		  this.uploadedCount = 0;
 		  this.failedCount = 0;
 
+		  this.uploadFolder = this.currentPath[this.currentPath.length - 1].path;
+		  
 		  // Show the upload progress modal
 		  this.toggleUploadProgressModal();
 		  console.log(this.selectedFiles.length);
