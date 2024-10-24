@@ -191,9 +191,10 @@ export class DropboxComponent {
 	
 	navigateToPath(index: number, event: Event) {
 	  this.thumbnailLoading = false;
+	  this.stopLoadingThumbnails();
+	  
 	  event.preventDefault();
 	  console.log(`Navigating to path index: ${index}`);
-	  this.stopLoadingThumbnails();
 
 	  this.currentPath = this.currentPath.slice(0, index + 1);
 	  const path = this.currentPath[index].path;
@@ -201,6 +202,9 @@ export class DropboxComponent {
 	}
 
   openFolder(folder: any) {
+	this.thumbnailLoading = false;
+	this.stopLoadingThumbnails();
+	
     const newPath = `${this.currentPath[this.currentPath.length - 1].path}/${folder.name}`;
     this.currentPath.push({ name: folder.name, path: newPath });
     this.loadFolders(newPath);
