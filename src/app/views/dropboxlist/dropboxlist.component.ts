@@ -405,6 +405,7 @@ export class DropboxComponent {
 		file.name.endsWith('.jpg') ||
 		file.name.endsWith('.webp') ||
 		file.name.endsWith('.ARW') ||
+		file.name.endsWith('.NEF') ||
 		file.name.endsWith('.DNG')
 	  ) {
 		const body = { imgPath: file.path_display };
