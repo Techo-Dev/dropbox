@@ -370,6 +370,7 @@ export class DropboxComponent {
     this.stop$ = new Subject<void>();
   }
   
+  /*
   private processFile(file: any) {
     if (
       file.name.endsWith('.png') ||
@@ -396,7 +397,43 @@ export class DropboxComponent {
     } else {
       return of();
     }
-  }
+  }*/
+  
+  private processFile(file: any) {
+	  if (
+		file.name.endsWith('.png') ||
+		file.name.endsWith('.jpg') ||
+		file.name.endsWith('.webp') ||
+		file.name.endsWith('.ARW') ||
+		file.name.endsWith('.DNG')
+	  ) {
+		const body = { imgPath: file.path_display };
+
+		return this.http.post('https://drop-backend-seven.vercel.app/thumbnails', body).pipe(
+		  map((response: any) => {
+			if (response?.thumbnail) {
+			  
+			  const binaryString = atob(response.thumbnail);
+			  const binaryData = new Uint8Array(binaryString.length);
+			  
+			  for (let i = 0; i < binaryString.length; i++) {
+				binaryData[i] = binaryString.charCodeAt(i);
+			  }
+
+			  const blob = new Blob([binaryData], { type: 'image/png' });
+			  return URL.createObjectURL(blob);
+			}
+			return file.name;
+		  }),
+		  catchError((error) => {
+			console.error('Error loading thumbnail for file:', file.name, error);
+			return of();
+		  })
+		);
+	  } else {
+		return of();
+	  }
+	}
 
   stopLoadingThumbnails() {
     console.log('Stopping API calls...');
