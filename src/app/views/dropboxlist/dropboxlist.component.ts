@@ -906,7 +906,8 @@ export class DropboxComponent {
 	uploadSingleFile(fileUpload: FileUpload, index: number): Observable<any> {
 	  const formData = new FormData();
 	  formData.append('files', fileUpload.file, fileUpload.file.name);
-	  formData.append('uploadFolder', this.currentPath[this.currentPath.length - 1].path);
+	  //formData.append('uploadFolder', this.currentPath[this.currentPath.length - 1].path);
+	  formData.append('uploadFolder', this.uploadFolder);
 	  
 	  const req = new HttpRequest('POST', 'https://drop-backend-seven.vercel.app/upload-files', formData, {
 		reportProgress: true
