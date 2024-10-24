@@ -400,15 +400,15 @@ export class DropboxComponent {
   }*/
   
   private processFile(file: any) {
-	  if (
-		file.name.endsWith('.png') ||
-		file.name.endsWith('.jpg') ||
-		file.name.endsWith('.webp') ||
-		file.name.endsWith('.ARW') ||
-		file.name.endsWith('.NEF') ||
-		file.name.endsWith('.RAF') ||
-		file.name.endsWith('.DNG')
-	  ) {
+	 // if (
+	//	file.name.endsWith('.png') ||
+	//	file.name.endsWith('.jpg') ||
+	//	file.name.endsWith('.webp') ||
+	//	file.name.endsWith('.ARW') ||
+	//	file.name.endsWith('.NEF') ||
+	//	file.name.endsWith('.RAF') ||
+	//	file.name.endsWith('.DNG')
+	//  ) {
 		const body = { imgPath: file.path_display };
 
 		return this.http.post('https://drop-backend-seven.vercel.app/thumbnails', body).pipe(
@@ -432,9 +432,9 @@ export class DropboxComponent {
 			return of();
 		  })
 		);
-	  } else {
-		return of();
-	  }
+	  //} else {
+		//return of();
+	  //}
 	}
 
   stopLoadingThumbnails() {
