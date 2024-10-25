@@ -274,7 +274,7 @@ export class DropboxComponent {
 		  this.subFoldersAndFiles = response.result.entries.filter((item: any) => item['.tag'] === 'file');
 		  
 		  //this.loadThumbnailsFromFiles(this.subFoldersAndFiles)
-		  if(currentPath[this.currentPath.length - 1].path != ''){
+		  if(this.currentPath[this.currentPath.length - 1].path != ''){
 			this.loadThumbnailsFromFiles(this.subFoldersAndFiles)
 		  }
 		  
