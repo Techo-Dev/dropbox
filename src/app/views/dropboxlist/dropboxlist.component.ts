@@ -273,7 +273,10 @@ export class DropboxComponent {
 		  
 		  this.subFoldersAndFiles = response.result.entries.filter((item: any) => item['.tag'] === 'file');
 		  
-		  this.loadThumbnailsFromFiles(this.subFoldersAndFiles)
+		  //this.loadThumbnailsFromFiles(this.subFoldersAndFiles)
+		  if(currentPath[this.currentPath.length - 1].path != ''){
+			this.loadThumbnailsFromFiles(this.subFoldersAndFiles)
+		  }
 		  
 		  this.visible3 = false;
         }
@@ -491,6 +494,13 @@ export class DropboxComponent {
     this.http.post('https://drop-backend-seven.vercel.app/create-folder', body).subscribe(
       (response: any) => {
         //console.log('Folder created:', response);
+		
+		const newFolder = {
+			name: this.newFolderName,
+			path: `${parentFolder}/${this.newFolderName}`
+		};
+		this.openFolder(newFolder);
+		
         this.refreshCurrentFolder();
         this.buttontext = 'Create';
         this.visible = false;

@@ -63,7 +63,12 @@ export class LoginComponent {
 		localStorage.setItem('logged_useremail', response.userdata.email);
 		localStorage.setItem('logged_userphone', response.userdata.phone);
         
-        this.router.navigate(['/dashboard']);
+		if (response.access_usertype == 'admin') {
+			this.router.navigate(['/dashboard']);
+		}else{
+			this.router.navigate(['/dropboxlist']);
+		}
+        //this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         //console.error('Login error:', error);
